@@ -2,8 +2,6 @@
 
 <h1 align="center">💰 Projeto de Câmbio Estudantil 💰</h1>
 
-<img src="Imagens/localizar_azul.png" width="500">
-
 ### Este repositório contém o trabalho em grupo realizado para a disciplina "Laboratório de Desenvolvimento de Software", do 4º período do curso de Engenharia de Software da PUC - Minas.
 
 </div>
