@@ -15,7 +15,7 @@
 * Lúcio Alves
 * Luidi Cadete Silva 
 
-## Professor 🫡
+## Professor
 
 * João Paulo Carneiro Aramuni
 
