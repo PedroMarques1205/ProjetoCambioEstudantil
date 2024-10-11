@@ -8,10 +8,7 @@
 
 </div>
 
-## Apresentação ✨✨✨
-
-Preview de algumas das telas do nosso sistema! 🏃
-
+## Apresentação
 
 ## Integrantes
 
