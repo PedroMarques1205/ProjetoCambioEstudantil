@@ -5,13 +5,14 @@ import 'package:front_moeda_estudantil/view/shared/email_input.dart';
 import 'package:front_moeda_estudantil/view/shared/password_input.dart';
 
 class LoginPage extends StatelessWidget {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      backgroundColor: Colors.white,
+      body: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        color: Colors.white,
         child: ListView(
           physics: const NeverScrollableScrollPhysics(),
           children: [
