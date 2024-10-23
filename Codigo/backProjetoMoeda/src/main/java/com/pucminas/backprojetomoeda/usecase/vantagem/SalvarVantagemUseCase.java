@@ -12,6 +12,6 @@ public class SalvarVantagemUseCase {
     VantagemService vantagemService;
 
     public Vantagem salvarVantagem(Vantagem vantagem) {
-        return vantagemService.saveVantagem(vantagem);
+        return vantagemService.salvarVantagem(vantagem);
     }
 }

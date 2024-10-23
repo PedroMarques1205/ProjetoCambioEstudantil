@@ -44,4 +44,8 @@
                     .filter(Usuario::isAtivo)
                     .toList();
         }
+
+        public Usuario buscarUsuarioPorEmail(String email) {
+            return usuarioRepository.findById(email).orElse(null);
+        }
     }
