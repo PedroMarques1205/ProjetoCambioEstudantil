@@ -3,6 +3,8 @@ package com.pucminas.backprojetomoeda.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 @Entity(name = "TrocaMoedas")
 public class TrocaMoedas {
@@ -16,6 +18,8 @@ public class TrocaMoedas {
     Usuario consumidor;
 
     Double valorMoedasGastas;
+
+    Date dataTroca;
 
     @ManyToOne
     @JoinColumn(name = "vantagem_adquirida_id")

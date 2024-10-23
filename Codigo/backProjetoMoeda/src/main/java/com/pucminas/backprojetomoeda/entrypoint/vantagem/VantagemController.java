@@ -1,6 +1,7 @@
 package com.pucminas.backprojetomoeda.entrypoint.vantagem;
 
 
+import com.pucminas.backprojetomoeda.model.Usuario;
 import com.pucminas.backprojetomoeda.model.Vantagem;
 import com.pucminas.backprojetomoeda.usecase.usuario.ObterUsuarioUseCase;
 import com.pucminas.backprojetomoeda.usecase.vantagem.ObterVantagemUseCase;
@@ -28,6 +29,11 @@ public class VantagemController {
     @GetMapping("/obterTodasVantagens")
     public ResponseEntity<List<Vantagem>> obterTodasVantagens() {
         return ResponseEntity.ok(obterVantagemUseCase.obterVantagem());
+    }
+
+    @GetMapping("/obterVantagensPorEmpresa")
+    public ResponseEntity<List<Vantagem>> obterTodasVantagens(@RequestBody Usuario empresa) {
+        return ResponseEntity.ok(obterVantagemUseCase.obterVantagemPorEmpresa(empresa));
     }
 
 }

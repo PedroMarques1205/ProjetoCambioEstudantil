@@ -1,22 +1,22 @@
-package com.pucminas.backprojetomoeda.model;
+    package com.pucminas.backprojetomoeda.model;
 
-import jakarta.persistence.*;
-import lombok.Data;
+    import jakarta.persistence.*;
+    import lombok.Data;
 
-@Data
-@Entity(name = "Vantagens")
-public class Vantagem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    @Data
+    @Entity(name = "Vantagens")
+    public class Vantagem {
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        Long id;
 
-    String titulo;
+        String titulo;
 
-    String descricao;
+        String descricao;
 
-    Double valor;
+        Double valor;
 
-    @ManyToOne
-    @JoinColumn(name = "empresa_provedor_email")
-    Usuario empresaProvedor;
-}
+        @ManyToOne
+        @JoinColumn(name = "empresa_provedor_email")
+        Usuario empresaProvedor;
+    }
