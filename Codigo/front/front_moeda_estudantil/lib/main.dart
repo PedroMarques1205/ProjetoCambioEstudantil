@@ -13,9 +13,9 @@ class MyApp extends StatelessWidget {
       title: 'Sistema Escolar',
       initialRoute: '/',
       routes: {
-        '/': (context) => LoginPage(), // Página de login
-        '/student': (context) => StudentMainScreenPage(), // Página do aluno
-        '/professor': (context) => ProfessorMainScreenPage(), // Página do professor
+        '/': (context) => LoginPage(), 
+        '/student': (context) => StudentMainScreenPage(),
+        '/professor': (context) => ProfessorMainScreenPage(), 
       },
     );
   }
