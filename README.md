@@ -1,4 +1,4 @@
-<img width=100% src="https://capsule-render.vercel.app/api?type=waving&height=160&color=##ffff00&reversal=false&section=header"/> 
+<img width=100% src="https://capsule-render.vercel.app/api?type=waving&height=160&color=ffbf00&reversal=false&section=header"/> 
 
 
 <div align="center">
@@ -29,5 +29,5 @@
 3. O sistema de autenticação permite diferentes perfis de usuários, como administrador e clientes, com permissões específicas para cada um.
 
 
-<img width=100% src="https://capsule-render.vercel.app/api?type=waving&height=160&color=fbd752&reversal=false&section=footer"/>
+<img width=100% src="https://capsule-render.vercel.app/api?type=waving&height=160&color=ffbf00&reversal=false&section=footer"/>
 
