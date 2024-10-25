@@ -1,3 +1,6 @@
+<img width=100% src="https://capsule-render.vercel.app/api?type=waving&height=160&color=fbd752&reversal=false&section=header"/> 
+
+
 <div align="center">
 
 <h1 align="center">💰 Projeto de Câmbio Estudantil 💰</h1>
