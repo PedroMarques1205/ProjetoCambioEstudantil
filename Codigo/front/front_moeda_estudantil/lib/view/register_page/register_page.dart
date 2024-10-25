@@ -95,80 +95,87 @@ class _RegisterPageState extends State<RegisterPage> {
       builder: (context, state) {
         return Scaffold(
           backgroundColor: Colors.white,
-          body: Column(
-            children: [
-              if (_currentIndex == 0)
-                ClipRRect(
-                  child: Image.network(
-                    backgroundUrl,
-                    width: MediaQuery.of(context).size.width,
-                    height: 240,
-                    fit: BoxFit.cover,
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                if (_currentIndex == 0)
+                  ClipRRect(
+                    child: Image.network(
+                      backgroundUrl,
+                      width: MediaQuery.of(context).size.width,
+                      height: 160,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                Container(
+                  height: MediaQuery.of(context).size.height - 240,
+                  child: PageView(
+                    controller: _pageController,
+                    onPageChanged: (index) {
+                      setState(() {
+                        _currentIndex = index;
+                      });
+                    },
+                    children: [
+                      SizedBox(height: 300, child: _buildUserTypeSelection()),
+                      SizedBox(
+                        height: 700,
+                        child: _buildPersonalDataForm(),
+                      ),
+                      if (userType != 'Empresa')
+                        SizedBox(height: 300, child: _buildInstitutionForm()),
+                    ],
                   ),
                 ),
-              Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  onPageChanged: (index) {
-                    setState(() {
-                      _currentIndex = index;
-                    });
-                  },
-                  children: [
-                    _buildUserTypeSelection(),
-                    _buildPersonalDataForm(),
-                    if (userType != 'Empresa') _buildInstitutionForm(),
-                  ],
+                _buildPageIndicator(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 20.0, horizontal: 30.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (_currentIndex > 0)
+                        CircleAvatar(
+                          backgroundColor: CambioColors.darkGray,
+                          child: IconButton(
+                            icon: const Icon(Icons.chevron_left,
+                                color: Colors.white),
+                            onPressed: _goToPreviousPage,
+                          ),
+                        ),
+                      if (_currentIndex < _getPageCount() - 1)
+                        CircleAvatar(
+                          backgroundColor: CambioColors.darkGray,
+                          child: IconButton(
+                            icon: const Icon(Icons.chevron_right,
+                                color: Colors.white),
+                            onPressed: _goToNextPage,
+                          ),
+                        )
+                      else
+                        CircleAvatar(
+                          backgroundColor: CambioColors.greenSecondary,
+                          child: IconButton(
+                            icon: const Icon(Icons.check, color: Colors.white),
+                            onPressed: () {
+                              _bloc.add(RegisterUserEvent(
+                                  email: email,
+                                  cpf: cpf,
+                                  cnpj: cnpj,
+                                  rg: rg,
+                                  endereco: endereco,
+                                  nome: nome,
+                                  senha: senha,
+                                  type: _getUserType(),
+                                  ativo: true));
+                            },
+                          ),
+                        )
+                    ],
+                  ),
                 ),
-              ),
-              _buildPageIndicator(),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 20.0, horizontal: 30.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    if (_currentIndex > 0)
-                      CircleAvatar(
-                        backgroundColor: CambioColors.darkGray,
-                        child: IconButton(
-                          icon: const Icon(Icons.chevron_left,
-                              color: Colors.white),
-                          onPressed: _goToPreviousPage,
-                        ),
-                      ),
-                    if (_currentIndex < _getPageCount() - 1)
-                      CircleAvatar(
-                        backgroundColor: CambioColors.darkGray,
-                        child: IconButton(
-                          icon: const Icon(Icons.chevron_right,
-                              color: Colors.white),
-                          onPressed: _goToNextPage,
-                        ),
-                      )
-                    else
-                      CircleAvatar(
-                        backgroundColor: CambioColors.greenSecondary,
-                        child: IconButton(
-                          icon: const Icon(Icons.check, color: Colors.white),
-                          onPressed: () {
-                            _bloc.add(RegisterUserEvent(
-                                email: email,
-                                cpf: cpf,
-                                cnpj: cnpj,
-                                rg: rg,
-                                endereco: endereco,
-                                nome: nome,
-                                senha: senha,
-                                type: _getUserType(),
-                                ativo: true));
-                          },
-                        ),
-                      )
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -231,43 +238,48 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildPersonalDataForm() {
     return Padding(
-      padding: const EdgeInsets.only(right: 20, left: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Cadastro de $userType',
-              style: TextStyle(
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold,
-                  color: CambioColors.darkGray)),
-          const SizedBox(height: 20),
-          _buildTextField('Nome', (valueName) {
-            nome = valueName;
-          }),
-          _buildTextField('Email', (valueEmail) {
-            email = valueEmail;
-          }),
-          if (userType != 'Empresa')
-            _buildTextField('CPF', (valueCPF) {
-              cpf = valueCPF;
+      padding: const EdgeInsets.only(
+        right: 20,
+        left: 20,
+        top: 100,
+      ),
+      child: Container(
+        height: 600,
+        child: ListView(
+          children: [
+            Text('Cadastro de $userType',
+                style: TextStyle(
+                    fontSize: 35,
+                    fontWeight: FontWeight.bold,
+                    color: CambioColors.darkGray)),
+            const SizedBox(height: 20),
+            _buildTextField('Nome', (valueName) {
+              nome = valueName;
             }),
-          if (userType != 'Empresa')
-            _buildTextField('RG', (valueRG) {
-              rg = valueRG;
+            _buildTextField('Email', (valueEmail) {
+              email = valueEmail;
             }),
-          if (userType != 'Empresa')
-            _buildTextField('Endereço', (valueAdress) {
-              endereco = valueAdress;
+            if (userType != 'Empresa')
+              _buildTextField('CPF', (valueCPF) {
+                cpf = valueCPF;
+              }),
+            if (userType != 'Empresa')
+              _buildTextField('RG', (valueRG) {
+                rg = valueRG;
+              }),
+            if (userType != 'Empresa')
+              _buildTextField('Endereço', (valueAdress) {
+                endereco = valueAdress;
+              }),
+            if (userType == 'Empresa')
+              _buildTextField('CNPJ', (valueCNPJ) {
+                cnpj = valueCNPJ;
+              }),
+            _buildTextField('Senha', (senhaValue) {
+              senha = senhaValue;
             }),
-          if (userType == 'Empresa')
-            _buildTextField('CNPJ', (valueCNPJ) {
-              cnpj = valueCNPJ;
-            }),
-          _buildTextField('Senha', (senhaValue) {
-            senha = senhaValue;
-          }),
-        ],
+          ],
+        ),
       ),
     );
   }

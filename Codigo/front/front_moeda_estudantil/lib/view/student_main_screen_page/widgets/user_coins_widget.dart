@@ -63,7 +63,7 @@ class _UserCoinsWidgetState extends State<UserCoinsWidget> {
           Padding(
             padding: const EdgeInsets.all(20),
             child: Text(
-              _isObscured ? '***' : 'R\$${widget.user.saldoMoedas.toString()}',
+              _isObscured ? '***' : 'R\$${widget.user.saldoMoedas != null ? widget.user.saldoMoedas.toString() : 0.00}',
               style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
