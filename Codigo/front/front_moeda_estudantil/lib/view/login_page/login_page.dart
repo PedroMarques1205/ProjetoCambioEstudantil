@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
           );
         }
         if (state is LoginSuccess) {
-          if (Context.currentUser.tipoAcesso == UserTypeEnum.enterprise) {
+          if (Context.currentUser.tipoAcesso == UserTypeEnum.ENTERPRISE) {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(

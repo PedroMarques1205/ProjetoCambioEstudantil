@@ -69,7 +69,7 @@ class _RegisterPageState extends State<RegisterPage> {
       bloc: _bloc,
       listener: (context, state) {
         if (state is RegisterSuccessState) {
-          if (Context.currentUser.tipoAcesso == UserTypeEnum.enterprise) {
+          if (Context.currentUser.tipoAcesso == UserTypeEnum.ENTERPRISE) {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -184,11 +184,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
   String _getUserType() {
     if (userType == 'Aluno') {
-      return UserTypeEnum.student.name;
+      return UserTypeEnum.STUDENT.name;
     } else if (userType == 'Professor') {
-      return UserTypeEnum.teacher.name;
+      return UserTypeEnum.TEACHER.name;
     } else {
-      return UserTypeEnum.enterprise.name;
+      return UserTypeEnum.ENTERPRISE.name;
     }
   }
 

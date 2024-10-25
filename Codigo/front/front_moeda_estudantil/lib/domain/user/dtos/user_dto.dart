@@ -11,7 +11,10 @@ class UserDTO {
   String? endereco;
   String? nome;
   String? senha;
+
+  @JsonKey(fromJson: _tipoAcessoFromJson)
   UserTypeEnum? tipoAcesso;
+
   bool? ativo;
   double? saldoMoedas;
 
@@ -28,16 +31,22 @@ class UserDTO {
     this.saldoMoedas,
   });
 
-  factory UserDTO.fromJson(Map<String, dynamic> json) => _$UserDTOFromJson(json);
-
+  factory UserDTO.fromJson(Map<String, dynamic> json) =>
+      _$UserDTOFromJson(json);
   Map<String, dynamic> toJson() => _$UserDTOToJson(this);
+
+  static UserTypeEnum? _tipoAcessoFromJson(String? tipo) {
+    switch (tipo?.toUpperCase()) {
+      case 'STUDENT':
+        return UserTypeEnum.STUDENT;
+      case 'TEACHER':
+        return UserTypeEnum.TEACHER;
+      case 'ENTERPRISE':
+        return UserTypeEnum.ENTERPRISE;
+      default:
+        return null;
+    }
+  }
 }
 
-enum UserTypeEnum {
-  @JsonValue('STUDENT')
-  student,
-  @JsonValue('TEACHER')
-  teacher,
-  @JsonValue('ENTERPRISE')
-  enterprise
-}
+enum UserTypeEnum { STUDENT, TEACHER, ENTERPRISE }
