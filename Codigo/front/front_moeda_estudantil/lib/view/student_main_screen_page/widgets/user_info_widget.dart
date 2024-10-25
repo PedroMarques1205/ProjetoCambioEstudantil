@@ -43,30 +43,41 @@ class UserInfoWidgetState extends State<UserInfoWidget> {
                 color: Colors.white, borderRadius: BorderRadius.circular(20)),
             child: Row(
               children: [
-                Container(
-                  width: 55,
-                  height: 55,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: ClipOval(
-                    child: Image.network(
-                      'https://avatar.iran.liara.run/public/${Context.number}',
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const SizedBox(
-                          child: Icon(Icons.person, color: Colors.white),
-                        );
-                      },
-                    ),
-                  ),
-                ),
+                widget.user.tipoAcesso == UserTypeEnum.ENTERPRISE
+                    ? const CircleAvatar(
+                        backgroundColor: Colors.orange,
+                        child: HeroIcon(
+                          HeroIcons.homeModern,
+                          color: Colors.white,
+                        ),
+                      )
+                    : Container(
+                        width: 55,
+                        height: 55,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: ClipOval(
+                          child: Image.network(
+                            'https://avatar.iran.liara.run/public/${Context.number}',
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return const SizedBox(
+                                child: Icon(Icons.person, color: Colors.white),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
                 const SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.user.email ?? widget.user.cnpj ?? widget.user.cpf ?? '',
+                      widget.user.email ??
+                          widget.user.cnpj ??
+                          widget.user.cpf ??
+                          '',
                       style: TextStyle(color: Colors.grey[400]),
                     ),
                     Text(
@@ -100,6 +111,10 @@ class UserInfoWidgetState extends State<UserInfoWidget> {
         TextEditingController(text: user.email);
     TextEditingController enderecoController =
         TextEditingController(text: user.endereco);
+    TextEditingController senhaController =
+        TextEditingController(text: user.senha);
+    TextEditingController cnpjController =
+        TextEditingController(text: user.cnpj);
 
     showDialog(
       context: context,
@@ -134,10 +149,21 @@ class UserInfoWidgetState extends State<UserInfoWidget> {
                 controller: emailController,
                 decoration: const InputDecoration(labelText: 'Email'),
               ),
+              if (widget.user.tipoAcesso == UserTypeEnum.STUDENT ||
+                  widget.user.tipoAcesso == UserTypeEnum.TEACHER)
+                TextField(
+                  controller: enderecoController,
+                  decoration: const InputDecoration(labelText: 'Endereço'),
+                ),
               TextField(
-                controller: enderecoController,
-                decoration: const InputDecoration(labelText: 'Endereço'),
+                controller: senhaController,
+                decoration: const InputDecoration(labelText: 'Senha'),
               ),
+              if (widget.user.tipoAcesso == UserTypeEnum.ENTERPRISE)
+                TextField(
+                  controller: cnpjController,
+                  decoration: const InputDecoration(labelText: 'CNPJ'),
+                ),
             ],
           ),
           actions: [
@@ -151,7 +177,22 @@ class UserInfoWidgetState extends State<UserInfoWidget> {
             ),
             TextButton(
               onPressed: () {
-                _bloc.add(UserInfoUpdateEvent(user: user));
+                if (widget.user.cnpj != cnpjController) {
+                  userCopy.cnpj = cnpjController.text;
+                }
+                if (widget.user.senha != senhaController) {
+                  userCopy.senha = senhaController.text;
+                }
+                if (widget.user.email != emailController) {
+                  userCopy.email = emailController.text;
+                }
+                if (widget.user.nome != nameController) {
+                  userCopy.nome = nameController.text;
+                }
+                if (widget.user.endereco != enderecoController) {
+                  userCopy.endereco = enderecoController.text;
+                }
+                _bloc.add(UserInfoUpdateEvent(user: userCopy));
               },
               child: Text(
                 'Salvar',

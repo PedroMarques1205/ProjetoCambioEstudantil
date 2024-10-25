@@ -14,7 +14,8 @@ class UserInfoBloc extends Bloc<UserInfoEvent, UserInfoState> {
     try {
       var resp = await service.update(event.user);
       emit(UserInfoUpdatedState());
-    } catch (error) {
+    } catch (error) { 
+      print(error);
       emit(UserInfoUpdateErrorState());
     }
   }
