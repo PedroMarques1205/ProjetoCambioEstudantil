@@ -17,7 +17,7 @@ class RegisterPageBloc extends Bloc<RegisterPageEvent, RegisterPageState> {
     try {
       var req = UserDTO();
       if (event.type == UserTypeEnum.enterprise.name) {
-        req = UserDTO(cnpj: event.cnpj, senha: event.senha, type: 'ENTERPRISE');
+        req = UserDTO(cnpj: event.cnpj, senha: event.senha, tipoAcesso: UserTypeEnum.enterprise, email: event.email);
       } else {
         req = UserDTO(
             email: event.email,
@@ -26,9 +26,9 @@ class RegisterPageBloc extends Bloc<RegisterPageEvent, RegisterPageState> {
             endereco: event.endereco,
             nome: event.nome,
             senha: event.senha,
-            type: event.type == UserTypeEnum.teacher.name
-                ? 'TEACHER'
-                : 'STUDENT');
+            tipoAcesso: event.type == UserTypeEnum.teacher.name
+                ? UserTypeEnum.teacher
+                : UserTypeEnum.student);
       }
 
       var user = await service.register(req);

@@ -14,7 +14,8 @@ UserDTO _$UserDTOFromJson(Map<String, dynamic> json) => UserDTO(
       endereco: json['endereco'] as String?,
       nome: json['nome'] as String?,
       senha: json['senha'] as String?,
-      type: json['type'] as String?,
+      tipoAcesso:
+          $enumDecodeNullable(_$UserTypeEnumEnumMap, json['tipoAcesso']),
       ativo: json['ativo'] as bool?,
       saldoMoedas: (json['saldoMoedas'] as num?)?.toDouble(),
     );
@@ -27,7 +28,13 @@ Map<String, dynamic> _$UserDTOToJson(UserDTO instance) => <String, dynamic>{
       'endereco': instance.endereco,
       'nome': instance.nome,
       'senha': instance.senha,
-      'type': instance.type,
+      'tipoAcesso': _$UserTypeEnumEnumMap[instance.tipoAcesso],
       'ativo': instance.ativo,
       'saldoMoedas': instance.saldoMoedas,
     };
+
+const _$UserTypeEnumEnumMap = {
+  UserTypeEnum.student: 'STUDENT',
+  UserTypeEnum.teacher: 'TEACHER',
+  UserTypeEnum.enterprise: 'ENTERPRISE',
+};

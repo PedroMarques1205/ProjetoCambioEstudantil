@@ -1,9 +1,11 @@
+import 'package:front_moeda_estudantil/domain/user/dtos/user_dto.dart';
+
 abstract class LoginState {}
 
 class LoginInitial extends LoginState {}
 
 class LoginSuccess extends LoginState {
-  final String userType;
+  final UserTypeEnum userType;
 
   LoginSuccess(this.userType);
 }

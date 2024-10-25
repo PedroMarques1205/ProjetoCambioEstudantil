@@ -69,7 +69,7 @@ class _RegisterPageState extends State<RegisterPage> {
       bloc: _bloc,
       listener: (context, state) {
         if (state is RegisterSuccessState) {
-          if (Context.currentUser.type == 'ENTERPRISE') {
+          if (Context.currentUser.tipoAcesso == UserTypeEnum.enterprise) {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(

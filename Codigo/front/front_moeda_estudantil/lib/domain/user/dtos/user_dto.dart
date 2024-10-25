@@ -11,7 +11,7 @@ class UserDTO {
   String? endereco;
   String? nome;
   String? senha;
-  String? type;
+  UserTypeEnum? tipoAcesso;
   bool? ativo;
   double? saldoMoedas;
 
@@ -23,7 +23,7 @@ class UserDTO {
     this.endereco,
     this.nome,
     this.senha,
-    this.type,
+    this.tipoAcesso,
     this.ativo,
     this.saldoMoedas,
   });

@@ -17,7 +17,7 @@ class MainScreenPageWidgetState extends State<MainScreenPage> {
       body: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          child: Context.currentUser.type == 'TEACHER'
+          child: Context.currentUser.tipoAcesso == UserTypeEnum.teacher
               ? ProfessorMainScreenPage()
               : MainStudentPage()),
     );

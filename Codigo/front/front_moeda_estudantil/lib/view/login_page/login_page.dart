@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front_moeda_estudantil/domain/context/context.dart';
+import 'package:front_moeda_estudantil/domain/user/dtos/user_dto.dart';
 import 'package:front_moeda_estudantil/generated/cambio_colors.dart';
 import 'package:front_moeda_estudantil/view/main_screen_page/main_screen_page.dart';
 import 'package:front_moeda_estudantil/view/shared/password_input.dart'
@@ -47,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
           );
         }
         if (state is LoginSuccess) {
-          if (Context.currentUser.type == 'ENTERPRISE') {
+          if (Context.currentUser.tipoAcesso == UserTypeEnum.enterprise) {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
