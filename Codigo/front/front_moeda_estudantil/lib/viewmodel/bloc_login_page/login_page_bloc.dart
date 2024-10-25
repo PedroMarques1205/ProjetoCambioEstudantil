@@ -17,7 +17,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       var user = await service.login(event.usuario, event.senha);
       Context.currentUser = user;
       print(user);
-      emit(LoginSuccess(user.tipoAcesso ?? UserTypeEnum.student));
+      emit(LoginSuccess(user.tipoAcesso ?? UserTypeEnum.STUDENT));
     } catch (error) {
       emit(LoginFailure('Erro ao logar. Verifique as credenciais de acesso.'));
     }

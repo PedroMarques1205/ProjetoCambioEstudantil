@@ -11,7 +11,7 @@ class Context {
   // flutter pub run build_runner build
 
   static const baseUrl =
-      'https://ab05-2804-14c-5bd2-86e4-105d-8445-87d7-5d27.ngrok-free.app/api';
+      'https://6a74-2804-14c-5b81-48f7-a4-d608-1928-73a9.ngrok-free.app/api';
   static final Dio dio = Dio(BaseOptions(baseUrl: baseUrl));
 
   static final int number = Random().nextInt(99) + 1; 
