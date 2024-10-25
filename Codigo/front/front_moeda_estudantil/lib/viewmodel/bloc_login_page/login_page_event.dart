@@ -5,3 +5,10 @@ class LoginButtonPressed extends LoginEvent {
 
   LoginButtonPressed(this.userType);
 }
+
+class DoLoginEvent extends LoginEvent {
+  final String usuario;
+  final String senha;
+
+  DoLoginEvent({required this.usuario, required this.senha});
+}

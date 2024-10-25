@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front_moeda_estudantil/domain/context/context.dart';
-import 'package:front_moeda_estudantil/domain/login_page/dtos/user_dto.dart';
+import 'package:front_moeda_estudantil/domain/user/dtos/user_dto.dart';
 import 'package:front_moeda_estudantil/view/professor_main_screen_page/professor_main_screen_page.dart';
 import 'package:front_moeda_estudantil/view/student_main_screen_page/student_main_screen_page.dart';
 
@@ -17,9 +17,9 @@ class MainScreenPageWidgetState extends State<MainScreenPage> {
       body: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          child: Context.currentUser.type == UserTypeEnum.professor
+          child: Context.currentUser.type == 'TEACHER'
               ? ProfessorMainScreenPage()
-              : StudentMainScreenPage()),
+              : MainStudentPage()),
     );
   }
 }

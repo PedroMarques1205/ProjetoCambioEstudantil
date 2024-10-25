@@ -7,5 +7,7 @@ class CambioColors {
 
   static Color greenSecondary = const Color(0xFF069E8C);
 
+  static Color darkGray = const Color(0xFF3B3F49);
+
   static Color red = const Color(0xFF9E064A);
 }
