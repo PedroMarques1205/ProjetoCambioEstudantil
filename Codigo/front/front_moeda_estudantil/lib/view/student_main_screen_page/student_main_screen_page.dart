@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:front_moeda_estudantil/domain/context/context.dart';
 import 'package:front_moeda_estudantil/generated/cambio_colors.dart';
+import 'package:front_moeda_estudantil/view/mensalidade_page/mensalidade_page.dart';
+import 'package:front_moeda_estudantil/view/student_main_screen_page/widgets/user_coins_widget.dart';
+import 'package:front_moeda_estudantil/view/student_main_screen_page/widgets/user_info_widget.dart';
 import 'package:heroicons/heroicons.dart';
 
 class MainStudentPage extends StatefulWidget {
@@ -12,11 +16,7 @@ class _MainStudentPageState extends State<MainStudentPage> {
   bool _obscureText = true;
   double balance = 100.00;
 
-  final List<Widget> _pages = [
-    HomeScreen(),
-    MarketScreen(),
-    ConfigScreen(),
-  ];
+  final List<Widget> _pages = [];
 
   void _toggleBalanceVisibility() {
     setState(() {
@@ -25,42 +25,22 @@ class _MainStudentPageState extends State<MainStudentPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _pages.addAll([
+      HomeScreen(
+        balance: balance,
+        obscureText: _obscureText,
+        onToggleVisibility: _toggleBalanceVisibility,
+      ),
+      Container(),
+    ]);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text(
-          'SmartCoin',
-          style: TextStyle(
-              color: CambioColors.greenPrimary, fontWeight: FontWeight.bold),
-        ),
-        actions: [
-          Row(
-            children: [
-              HeroIcon(
-                HeroIcons.eyeSlash,
-                color: Colors.grey[800],
-              ),
-              const SizedBox(width: 15),
-              HeroIcon(
-                HeroIcons.magnifyingGlass,
-                color: Colors.grey[800],
-              ),
-              const SizedBox(width: 15),
-              CircleAvatar(
-                radius: 15,
-                backgroundColor: Colors.grey[600],
-                child: Icon(
-                  Icons.person,
-                  color: Colors.grey[200],
-                ),
-              ),
-              const SizedBox(width: 15),
-            ],
-          )
-        ],
-        backgroundColor: Colors.white,
-      ),
+      backgroundColor: CambioColors.backgroundColor,
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
@@ -76,10 +56,6 @@ class _MainStudentPageState extends State<MainStudentPage> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: HeroIcon(HeroIcons.shoppingBag),
-            label: 'Mercado',
-          ),
-          BottomNavigationBarItem(
             icon: HeroIcon(HeroIcons.cog6Tooth),
             label: 'Config',
           ),
@@ -89,124 +65,134 @@ class _MainStudentPageState extends State<MainStudentPage> {
   }
 }
 
-// Widget da aba Home
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  final double balance;
+  final bool obscureText;
+  final VoidCallback onToggleVisibility;
+
+  const HomeScreen({
+    Key? key,
+    required this.balance,
+    required this.obscureText,
+    required this.onToggleVisibility,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    bool _obscureText = true;
-    double balance = 100.00;
-
     return Padding(
-      padding: const EdgeInsets.all(15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Saldo disponível',
-                  style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey[800]),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Text(
-                      _obscureText
-                          ? 'R\$ ••••••'
-                          : 'R\$ ${balance.toStringAsFixed(2)}',
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: Colors.grey[800],
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    IconButton(
-                      onPressed: () {},
-                      icon: HeroIcon(
-                        _obscureText ? HeroIcons.eye : HeroIcons.eyeSlash,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.account_balance_wallet),
-            title: const Text('Extrato de Transações'),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.credit_card),
-            title: const Text('Cartões'),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.attach_money),
-            title: const Text('Investimentos'),
-            onTap: () {},
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class MarketScreen extends StatelessWidget {
-  const MarketScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Conteúdo do Mercado'));
-  }
-}
-
-class ConfigScreen extends StatelessWidget {
-  const ConfigScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: Column(
+        padding: const EdgeInsets.only(right: 23, left: 23),
+        child: Column(
           children: [
-            Divider(
-              color: Colors.grey[300],
+            UserInfoWidget(
+              user: Context.currentUser,
+            ),
+            UserCoinsWidget(
+              user: Context.currentUser,
+            ),
+            const SizedBox(
+              height: 15,
             ),
             Container(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.all(10),
+              width: MediaQuery.of(context).size.width,
+              height: 80,
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(20)),
               child: Row(
                 children: [
-                  Text(
-                    'Sair',
-                    style: TextStyle(
-                        color: CambioColors.darkPrimary, fontSize: 18),
+                  Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MensalidadePage(),
+                            ),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            HeroIcon(
+                              HeroIcons.currencyDollar,
+                              color: CambioColors.greenSecondary,
+                            ),
+                            Text(
+                              'Financeiro',
+                              style:
+                                  TextStyle(color: CambioColors.greenSecondary),
+                            )
+                          ],
+                        ),
+                      )),
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: Column(
+                      children: [
+                        HeroIcon(
+                          HeroIcons.homeModern,
+                          color: CambioColors.greenSecondary,
+                        ),
+                        Text(
+                          'Restaurantes',
+                          style: TextStyle(color: CambioColors.greenSecondary),
+                        )
+                      ],
+                    ),
                   ),
                   const Spacer(),
-                  HeroIcon(
-                    HeroIcons.arrowLeftEndOnRectangle,
-                    color: CambioColors.greenSecondary,
-                  )
+                  Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: Column(
+                      children: [
+                        HeroIcon(
+                          HeroIcons.bookOpen,
+                          color: CambioColors.greenSecondary,
+                        ),
+                        Text(
+                          'Materiais',
+                          style: TextStyle(color: CambioColors.greenSecondary),
+                        )
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-            Divider(
-              color: Colors.grey[300],
+            const SizedBox(
+              height: 15,
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 200,
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(15)),
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'Atividades',
+                        style: TextStyle(
+                            color: Colors.grey[800],
+                            fontWeight: FontWeight.bold),
+                      ),
+                      const Spacer(),
+                      IconButton(
+                          onPressed: () {},
+                          icon: HeroIcon(
+                            HeroIcons.adjustmentsHorizontal,
+                            color: CambioColors.greenPrimary,
+                          ))
+                    ],
+                  ),
+                  Divider(
+                    color: Colors.grey[300],
+                  )
+                ],
+              ),
             ),
           ],
         ));

@@ -10,4 +10,6 @@ class CambioColors {
   static Color darkGray = const Color(0xFF3B3F49);
 
   static Color red = const Color(0xFF9E064A);
+
+  static Color backgroundColor = const Color(0xFFFAF4F1);
 }
