@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:front_moeda_estudantil/domain/context/context.dart';
 import 'package:front_moeda_estudantil/generated/cambio_colors.dart';
+import 'package:front_moeda_estudantil/view/student_main_screen_page/student_main_screen_page.dart';
 import 'package:heroicons/heroicons.dart';
 
 class MensalidadePage extends StatefulWidget {
@@ -12,34 +13,68 @@ class _MensalidadePageState extends State<MensalidadePage> {
   double mensalidade = 1800.00;
   double desconto = 0;
   double valorFinal = 1800.00;
+  double? descontoSelecionado;
+  bool isSaldoVisible = false;
 
   final List<double> porcentagens = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
 
   void aplicarDesconto(double porcentagem) {
     setState(() {
-      desconto = porcentagem;
-      valorFinal = mensalidade - (mensalidade * porcentagem / 100);
+      if (descontoSelecionado == porcentagem) {
+        descontoSelecionado = null;
+        desconto = 0;
+        valorFinal = mensalidade;
+      } else {
+        descontoSelecionado = porcentagem;
+        desconto = porcentagem;
+        valorFinal = mensalidade - (mensalidade * porcentagem / 100);
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    double saldo = Context.currentUser.saldoMoedas ?? 0;
+    bool saldoInsuficiente =
+        saldo < (mensalidade * (descontoSelecionado ?? 0) / 100);
+
     return Scaffold(
       backgroundColor: CambioColors.backgroundColor,
       appBar: AppBar(
         backgroundColor: CambioColors.backgroundColor,
         title: Text(
           'Mensalidade',
-          style: TextStyle(color: Colors.grey[800]),
+          style:
+              TextStyle(color: Colors.grey[800], fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MainStudentPage(),
+                ),
+              );
             },
             icon: Icon(
               Icons.arrow_back,
               color: CambioColors.greenSecondary,
             )),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MainStudentPage(),
+                  ),
+                );
+              },
+              child: Text(
+                'Aplicar',
+                style: TextStyle(color: CambioColors.greenSecondary),
+              ))
+        ],
       ),
       body: Column(
         children: [
@@ -63,16 +98,22 @@ class _MensalidadePageState extends State<MensalidadePage> {
                   ),
                   const Spacer(),
                   Text(
-                    'R\$${Context.currentUser.saldoMoedas}',
+                    isSaldoVisible
+                        ? 'R\$${Context.currentUser.saldoMoedas}'
+                        : '****',
                     style: TextStyle(
                       color: CambioColors.darkGray,
                     ),
                   ),
                   const Spacer(),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        isSaldoVisible = !isSaldoVisible;
+                      });
+                    },
                     icon: HeroIcon(
-                      HeroIcons.eyeSlash,
+                      isSaldoVisible ? HeroIcons.eye : HeroIcons.eyeSlash,
                       color: CambioColors.darkGray,
                     ),
                   )
@@ -80,7 +121,6 @@ class _MensalidadePageState extends State<MensalidadePage> {
               ),
             ),
           ),
-          const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.only(right: 23, left: 23),
             child: Container(
@@ -124,47 +164,72 @@ class _MensalidadePageState extends State<MensalidadePage> {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    'Selecione o desconto:',
+                    "Com o SmartCoin, você pode ganhar até 50% de desconto na mensalidade! Suas moedas viram desconto, e você escolhe o valor. Só lembre: ao reduzir o desconto, as moedas usadas não voltam.",
                     style: TextStyle(
-                        color: Colors.grey[800],
+                        color: Colors.grey[500],
                         fontWeight: FontWeight.bold,
-                        fontSize: 18),
+                        fontSize: 12),
                   ),
                   const SizedBox(height: 10),
-                  GridView.builder(
-                    shrinkWrap: true,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      childAspectRatio: 2.5,
+                  Container(
+                    height: 400,
+                    child: ListView.builder(
+                      itemCount: porcentagens.length,
+                      itemBuilder: (context, index) {
+                        double porcentagem = porcentagens[index];
+                        bool isSelected = descontoSelecionado == porcentagem;
+                        bool isDisabled = saldoInsuficiente && !isSelected;
+                        return Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: GestureDetector(
+                            onTap: isDisabled
+                                ? null
+                                : () {
+                                    aplicarDesconto(porcentagem);
+                                  },
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? CambioColors.greenSecondary
+                                        .withOpacity(0.2)
+                                    : Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                                border: Border.all(
+                                  color: isDisabled
+                                      ? Colors.grey[400]!
+                                      : (isSelected
+                                          ? CambioColors.greenSecondary
+                                          : Colors.grey[400]!),
+                                  width: 1.5,
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    '${porcentagem.toInt()}%',
+                                    style: TextStyle(
+                                      color: isDisabled
+                                          ? Colors.grey
+                                          : (isSelected
+                                              ? CambioColors.greenSecondary
+                                              : Colors.grey[600]),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  if (isSelected)
+                                    HeroIcon(
+                                      HeroIcons.checkCircle,
+                                      color: CambioColors.greenSecondary,
+                                    )
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                    itemCount: porcentagens.length,
-                    itemBuilder: (context, index) {
-                      double porcentagem = porcentagens[index];
-                      return ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: desconto == porcentagem
-                              ? CambioColors.greenSecondary
-                              : Colors.grey[300],
-                          foregroundColor: desconto == porcentagem
-                              ? Colors.white
-                              : Colors.grey[800],
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        onPressed: () {
-                          aplicarDesconto(porcentagem);
-                        },
-                        child: Text(
-                          '$porcentagem%',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      );
-                    },
                   ),
                 ],
               ),

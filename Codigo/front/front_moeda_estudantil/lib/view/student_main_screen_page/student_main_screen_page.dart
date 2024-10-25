@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:front_moeda_estudantil/domain/context/context.dart';
 import 'package:front_moeda_estudantil/generated/cambio_colors.dart';
 import 'package:front_moeda_estudantil/view/mensalidade_page/mensalidade_page.dart';
+import 'package:front_moeda_estudantil/view/restaurantes_details_page/restaurantes_page.dart';
 import 'package:front_moeda_estudantil/view/student_main_screen_page/widgets/user_coins_widget.dart';
 import 'package:front_moeda_estudantil/view/student_main_screen_page/widgets/user_info_widget.dart';
 import 'package:heroicons/heroicons.dart';
@@ -126,19 +127,30 @@ class HomeScreen extends StatelessWidget {
                         ),
                       )),
                   const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Column(
-                      children: [
-                        HeroIcon(
-                          HeroIcons.homeModern,
-                          color: CambioColors.greenSecondary,
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RestaurantesPage(),
                         ),
-                        Text(
-                          'Restaurantes',
-                          style: TextStyle(color: CambioColors.greenSecondary),
-                        )
-                      ],
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Column(
+                        children: [
+                          HeroIcon(
+                            HeroIcons.homeModern,
+                            color: CambioColors.greenSecondary,
+                          ),
+                          Text(
+                            'Lanchonetes',
+                            style:
+                                TextStyle(color: CambioColors.greenSecondary),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   const Spacer(),
