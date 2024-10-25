@@ -9,4 +9,14 @@ class UserService {
     var user = await client.login(usuario, senha);
     return user;
   }
+
+  Future<UserDTO> register(UserDTO newUser) async {
+    var resp = await client.register(newUser);
+    return resp;
+  }
+
+  Future<UserDTO> update(UserDTO user) async {
+    var resp = await client.update(user);
+    return resp;
+  }
 }

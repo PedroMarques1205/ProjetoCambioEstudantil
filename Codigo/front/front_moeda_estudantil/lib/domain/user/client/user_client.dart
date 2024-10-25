@@ -13,4 +13,16 @@ abstract class UserClient {
     @Query('usuario') String usuario,
     @Query('senha') String senha,
   );
+
+  @POST('/usuario/novoUsuario')
+  Future<UserDTO> register(@Body() UserDTO req);
+
+  @PUT('/usuario/editarUsuario')
+  Future<UserDTO> update(@Body() UserDTO req);
+
+  @GET('/usuario/obterUsuariosPorTipoAcesso')
+  Future<List<UserDTO>> getByType(@Query('usuario') String usuario);
+
+  @DELETE('/usuario/deletarUsuario')
+  Future<void> delete(@Body() String user);
 }
