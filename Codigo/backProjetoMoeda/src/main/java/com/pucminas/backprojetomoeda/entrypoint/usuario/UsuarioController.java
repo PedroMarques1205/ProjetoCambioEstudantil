@@ -1,6 +1,7 @@
 package com.pucminas.backprojetomoeda.entrypoint.usuario;
 
 import com.pucminas.backprojetomoeda.common.enums.TipoUsuario;
+import com.pucminas.backprojetomoeda.core.usuario.UsuarioService;
 import com.pucminas.backprojetomoeda.model.Usuario;
 import com.pucminas.backprojetomoeda.usecase.usuario.DeletarUsuarioUseCase;
 import com.pucminas.backprojetomoeda.usecase.usuario.EditarUsuarioUseCase;
@@ -28,6 +29,9 @@ public class UsuarioController {
     @Autowired
     ObterUsuarioUseCase obterUsuarioUseCase;
 
+    @Autowired
+    UsuarioService usuarioService;
+
     @PostMapping("/novoUsuario")
     public ResponseEntity<Usuario> salvaNovoUsuario(@RequestBody @Valid Usuario usuario) {
         return ResponseEntity.ok(salvarNovoUsuarioUseCase.salvarNovoUsuario(usuario));
@@ -40,7 +44,7 @@ public class UsuarioController {
 
     @PutMapping("/editarUsuario")
     public ResponseEntity<Usuario> editarUsuario(@RequestBody Usuario params) {
-        return ResponseEntity.ok(new Usuario());
+        return ResponseEntity.ok(usuarioService.editarUsuario(params.getEmail(),params));
     }
 
     @GetMapping("/login")
@@ -52,5 +56,6 @@ public class UsuarioController {
     public ResponseEntity<List<Usuario>> obterUsuarioPorAcesso(@RequestParam TipoUsuario usuario) {
         return ResponseEntity.ok(obterUsuarioUseCase.obterUsuarioPorTipoAcesso(usuario));
     }
+
 
 }

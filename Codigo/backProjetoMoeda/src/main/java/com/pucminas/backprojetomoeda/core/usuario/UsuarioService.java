@@ -48,4 +48,20 @@
         public Usuario buscarUsuarioPorEmail(String email) {
             return usuarioRepository.findById(email).orElse(null);
         }
+
+        public Usuario editarUsuario(String email, Usuario usuarioAtualizado) {
+            return usuarioRepository.findById(email).map(usuarioExistente -> {
+                usuarioExistente.setCpf(usuarioAtualizado.getCpf());
+                usuarioExistente.setCnpj(usuarioAtualizado.getCnpj());
+                usuarioExistente.setRg(usuarioAtualizado.getRg());
+                usuarioExistente.setEndereco(usuarioAtualizado.getEndereco());
+                usuarioExistente.setNome(usuarioAtualizado.getNome());
+                usuarioExistente.setSenha(usuarioAtualizado.getSenha());
+                usuarioExistente.setTipoAcesso(usuarioAtualizado.getTipoAcesso());
+                usuarioExistente.setAtivo(usuarioAtualizado.isAtivo());
+                usuarioExistente.setSaldoMoedas(usuarioAtualizado.getSaldoMoedas());
+
+                return usuarioRepository.save(usuarioExistente);
+            }).orElse(null);
+        }
     }
