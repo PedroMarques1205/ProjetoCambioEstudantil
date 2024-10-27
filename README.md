@@ -1,3 +1,6 @@
+<img width=100% src="https://capsule-render.vercel.app/api?type=waving&height=160&color=ffbf00&reversal=false&section=header"/> 
+
+
 <div align="center">
 
 <h1 align="center">💰 Projeto de Câmbio Estudantil 💰</h1>
@@ -24,4 +27,7 @@
 1. Certifique-se de que o backend está rodando antes de executar o frontend para garantir que as APIs funcionem corretamente.
 2. Para testes e acesso à base de dados, você pode usar ferramentas como MySQL Workbench ou o próprio console do MySQL.
 3. O sistema de autenticação permite diferentes perfis de usuários, como administrador e clientes, com permissões específicas para cada um.
+
+
+<img width=100% src="https://capsule-render.vercel.app/api?type=waving&height=160&color=ffbf00&reversal=false&section=footer"/>
 
