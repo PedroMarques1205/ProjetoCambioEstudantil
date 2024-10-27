@@ -102,7 +102,7 @@ class _UserClient implements UserClient {
     final _data = <String, dynamic>{};
     _data.addAll(req.toJson());
     final _options = _setStreamType<UserDTO>(Options(
-      method: 'PUT',
+      method: 'POST',
       headers: _headers,
       extra: _extra,
     )

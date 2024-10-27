@@ -42,7 +42,7 @@ public class UsuarioController {
         return ResponseEntity.ok(deletarUsuarioUseCase.deletarUsuario(usuario));
     }
 
-    @PutMapping("/editarUsuario")
+    @PostMapping("/editarUsuario")
     public ResponseEntity<Usuario> editarUsuario(@RequestBody Usuario params) {
         return ResponseEntity.ok(usuarioService.editarUsuario(params.getEmail(),params));
     }

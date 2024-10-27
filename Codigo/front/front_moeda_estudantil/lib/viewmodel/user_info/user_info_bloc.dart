@@ -12,7 +12,8 @@ class UserInfoBloc extends Bloc<UserInfoEvent, UserInfoState> {
 
   Future<void> _onUpdate(UserInfoUpdateEvent event, Emitter<UserInfoState> emit) async {
     try {
-      var resp = await service.update(event.user);
+      print(event.user);
+      var resp = await service.register(event.user);
       emit(UserInfoUpdatedState());
     } catch (error) { 
       print(error);

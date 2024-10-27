@@ -10,8 +10,9 @@ import 'package:heroicons/heroicons.dart';
 
 class UserInfoWidget extends StatefulWidget {
   final UserDTO user;
+  final double? top;
 
-  UserInfoWidget({super.key, required this.user});
+  UserInfoWidget({super.key, required this.user, this.top});
 
   @override
   State<UserInfoWidget> createState() => UserInfoWidgetState();
@@ -30,13 +31,10 @@ class UserInfoWidgetState extends State<UserInfoWidget> {
   Widget build(BuildContext context) {
     return BlocConsumer<UserInfoBloc, UserInfoState>(
       bloc: _bloc,
-      listener: (context, state) {
-        if (state is UserInfoUpdateErrorState) {}
-        if (state is UserInfoUpdatedState) {}
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         return Padding(
-          padding: const EdgeInsets.only(top: 60, bottom: 30),
+          padding: EdgeInsets.only(top: widget.top ?? 60, bottom: 30),
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -192,7 +190,9 @@ class UserInfoWidgetState extends State<UserInfoWidget> {
                 if (widget.user.endereco != enderecoController) {
                   userCopy.endereco = enderecoController.text;
                 }
-                _bloc.add(UserInfoUpdateEvent(user: userCopy));
+                _bloc.add(UserInfoUpdateEvent(
+                    user: userCopy, email: widget.user.email!));
+                Navigator.pop(context);
               },
               child: Text(
                 'Salvar',

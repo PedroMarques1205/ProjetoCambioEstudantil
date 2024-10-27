@@ -53,7 +53,7 @@ class RestaurantesPage extends StatelessWidget {
             height: 10,
           ),
           SizedBox(
-            height: 440,
+            height: 430,
             child: ListView.builder(
               itemCount: 12,
               itemBuilder: (context, index) {

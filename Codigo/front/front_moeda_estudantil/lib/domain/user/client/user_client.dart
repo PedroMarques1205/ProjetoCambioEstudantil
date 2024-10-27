@@ -17,7 +17,7 @@ abstract class UserClient {
   @POST('/usuario/novoUsuario')
   Future<UserDTO> register(@Body() UserDTO req);
 
-  @PUT('/usuario/editarUsuario')
+  @POST('/usuario/editarUsuario')
   Future<UserDTO> update(@Body() UserDTO req);
 
   @GET('/usuario/obterUsuariosPorTipoAcesso')
