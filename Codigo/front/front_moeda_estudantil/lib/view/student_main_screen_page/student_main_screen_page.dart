@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:front_moeda_estudantil/domain/context/context.dart';
+import 'package:front_moeda_estudantil/domain/user/dtos/user_dto.dart';
 import 'package:front_moeda_estudantil/generated/cambio_colors.dart';
 import 'package:front_moeda_estudantil/view/login_page/login_page.dart';
 import 'package:front_moeda_estudantil/view/mensalidade_page/mensalidade_page.dart';
 import 'package:front_moeda_estudantil/view/restaurantes_details_page/restaurantes_page.dart';
+import 'package:front_moeda_estudantil/view/student_list_page/student_list_page_widget.dart';
 import 'package:front_moeda_estudantil/view/student_main_screen_page/widgets/user_coins_widget.dart';
 import 'package:front_moeda_estudantil/view/student_main_screen_page/widgets/user_info_widget.dart';
 import 'package:heroicons/heroicons.dart';
@@ -117,7 +119,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       child: SingleChildScrollView(
@@ -143,75 +145,107 @@ class HomeScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20)),
                   child: Row(
                     children: [
-                      Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MensalidadePage(),
+                      Context.currentUser.tipoAcesso == UserTypeEnum.STUDENT
+                          ? Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MensalidadePage(),
+                                    ),
+                                  );
+                                },
+                                child: Column(
+                                  children: [
+                                    HeroIcon(
+                                      HeroIcons.currencyDollar,
+                                      color: CambioColors.greenSecondary,
+                                    ),
+                                    Text(
+                                      'Financeiro',
+                                      style: TextStyle(
+                                          color: CambioColors.greenSecondary),
+                                    )
+                                  ],
                                 ),
-                              );
-                            },
+                              ))
+                          : InkWell(
+                              onTap: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        StudentListPageWidget(),
+                                  ),
+                                );
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: Column(
+                                  children: [
+                                    HeroIcon(
+                                      HeroIcons.arrowsRightLeft,
+                                      color: CambioColors.greenSecondary,
+                                    ),
+                                    Text(
+                                      'Transferir',
+                                      style: TextStyle(
+                                          color: CambioColors.greenSecondary),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                      const Spacer(),
+                      if (Context.currentUser.tipoAcesso ==
+                          UserTypeEnum.STUDENT)
+                        InkWell(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RestaurantesPage(),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(5),
                             child: Column(
                               children: [
                                 HeroIcon(
-                                  HeroIcons.currencyDollar,
+                                  HeroIcons.homeModern,
                                   color: CambioColors.greenSecondary,
                                 ),
                                 Text(
-                                  'Financeiro',
+                                  'Lanchonetes',
                                   style: TextStyle(
                                       color: CambioColors.greenSecondary),
                                 )
                               ],
                             ),
-                          )),
+                          ),
+                        ),
                       const Spacer(),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => RestaurantesPage(),
-                            ),
-                          );
-                        },
-                        child: Padding(
+                      if (Context.currentUser.tipoAcesso ==
+                          UserTypeEnum.STUDENT)
+                        Padding(
                           padding: const EdgeInsets.all(5),
                           child: Column(
                             children: [
                               HeroIcon(
-                                HeroIcons.homeModern,
+                                HeroIcons.bookOpen,
                                 color: CambioColors.greenSecondary,
                               ),
                               Text(
-                                'Lanchonetes',
+                                'Materiais',
                                 style: TextStyle(
                                     color: CambioColors.greenSecondary),
                               )
                             ],
                           ),
                         ),
-                      ),
-                      const Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Column(
-                          children: [
-                            HeroIcon(
-                              HeroIcons.bookOpen,
-                              color: CambioColors.greenSecondary,
-                            ),
-                            Text(
-                              'Materiais',
-                              style:
-                                  TextStyle(color: CambioColors.greenSecondary),
-                            )
-                          ],
-                        ),
-                      ),
                     ],
                   ),
                 ),

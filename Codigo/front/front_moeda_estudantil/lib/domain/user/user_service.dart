@@ -15,6 +15,10 @@ class UserService {
     return resp;
   }
 
+  Future<List<UserDTO>> getStudents() async {
+    return await client.getByType(UserTypeEnum.STUDENT.name);
+  }
+
   Future<UserDTO> update(UserDTO user) async {
     var resp = await client.update(user);
     return resp;

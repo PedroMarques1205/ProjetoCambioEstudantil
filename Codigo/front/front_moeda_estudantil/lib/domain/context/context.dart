@@ -10,7 +10,9 @@ class Context {
   // comando pra criar arquivos automaticos:
   // flutter pub run build_runner build
 
-  static const baseUrl = 'https://6852-186-248-79-50.ngrok-free.app/api';
+  // flutter pub run build_runner build
+
+  static const baseUrl = 'http://localhost:8080/api';
   static final Dio dio = Dio(BaseOptions(baseUrl: baseUrl));
 
   static final int number = Random().nextInt(99) + 1; 
