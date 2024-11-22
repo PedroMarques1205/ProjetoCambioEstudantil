@@ -17,7 +17,7 @@ public class ObterVantagemUseCase {
         return vantagemService.buscarTodasVantagens();
     }
 
-    public List<Vantagem> obterVantagemPorEmpresa(Usuario empresa) {
+    public List<Vantagem> obterVantagemPorEmpresa(String empresa) {
         return vantagemService.buscarVantagensPorEmpresa(empresa);
     }
 

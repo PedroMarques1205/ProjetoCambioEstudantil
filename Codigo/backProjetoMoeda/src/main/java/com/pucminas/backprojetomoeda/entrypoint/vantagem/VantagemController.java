@@ -32,8 +32,8 @@ public class VantagemController {
     }
 
     @GetMapping("/obterVantagensPorEmpresa")
-    public ResponseEntity<List<Vantagem>> obterTodasVantagens(@RequestBody Usuario empresa) {
-        return ResponseEntity.ok(obterVantagemUseCase.obterVantagemPorEmpresa(empresa));
+    public ResponseEntity<List<Vantagem>> obterTodasVantagens(@RequestParam String cnpj) {
+        return ResponseEntity.ok(obterVantagemUseCase.obterVantagemPorEmpresa(cnpj));
     }
 
 }

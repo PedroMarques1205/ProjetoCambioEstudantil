@@ -22,8 +22,8 @@ public class VantagemService {
         return vantagemRepository.findById(id).orElse(null);
     }
 
-    public List<Vantagem> buscarVantagensPorEmpresa(Usuario empresa) {
-        return vantagemRepository.findByEmpresaProvedor(empresa);
+    public List<Vantagem> buscarVantagensPorEmpresa(String empresa) {
+        return vantagemRepository.findByEmpresaProvedor_Cnpj(empresa);
     }
 
     public List<Vantagem> buscarTodasVantagens() {

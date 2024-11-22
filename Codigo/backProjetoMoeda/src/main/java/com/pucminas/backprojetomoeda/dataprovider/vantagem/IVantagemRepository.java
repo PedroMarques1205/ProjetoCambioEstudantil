@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface IVantagemRepository extends JpaRepository<Vantagem, Long> {
-    List<Vantagem> findByEmpresaProvedor(Usuario usuario);
+    List<Vantagem> findByEmpresaProvedor_Cnpj(String cnpj);
 }
