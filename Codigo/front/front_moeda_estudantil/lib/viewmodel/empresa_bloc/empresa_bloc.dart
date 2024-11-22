@@ -1,11 +1,20 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:front_moeda_estudantil/domain/user/user_service.dart';
-import 'package:front_moeda_estudantil/viewmodel/empresa_bloc/empresa_event.dart';
-import 'package:front_moeda_estudantil/viewmodel/empresa_bloc/empresa_state.dart';
+import 'empresa_event.dart';
+import 'empresa_state.dart';
+import '../../domain/vantagem/vantagem_service.dart';
 
-class EmpresaDetalhesBloc
-    extends Bloc<EmpresaDetalhesEvent, EmpresaDetalhesState> {
-  UserService service = UserService();
+class EmpresaBloc extends Bloc<EmpresaEvent, EmpresaState> {
+  final VantagemService service;
 
-  EmpresaDetalhesBloc() : super(EmpresaDetalhesInitState()) {}
+  EmpresaBloc(this.service) : super(EmpresaInitial()) {
+    on<FetchVantagensEvent>((event, emit) async {
+      emit(EmpresaLoading());
+      try {
+        final vantagens = await service.fetchVantagens(event.nomeOuCnpj);
+        emit(EmpresaLoaded(vantagens));
+      } catch (e) {
+        emit(EmpresaError('Erro ao buscar vantagens: $e'));
+      }
+    });
+  }
 }

@@ -4,6 +4,13 @@ import 'package:front_moeda_estudantil/generated/cambio_colors.dart';
 import 'package:front_moeda_estudantil/view/login_page/login_page.dart';
 import 'package:front_moeda_estudantil/view/student_main_screen_page/widgets/user_info_widget.dart';
 import 'package:heroicons/heroicons.dart';
+import '../../viewmodel/empresa_bloc/empresa_bloc.dart';
+import '../../viewmodel/empresa_bloc/empresa_event.dart';
+import '../../viewmodel/empresa_bloc/empresa_state.dart';
+import '../../domain/vantagem/vantagem_service.dart'; // Certifique-se de importar o VantagemService corretamente.
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../domain/vantagem/dtos/vantagem_dto.dart';
+import '../../domain/vantagem/client/vantagem_client.dart';
 
 class EmpresaPage extends StatefulWidget {
   @override
@@ -11,70 +18,56 @@ class EmpresaPage extends StatefulWidget {
 }
 
 class _EmpresaPageState extends State<EmpresaPage> {
-  final List<Map<String, dynamic>> produtos = [];
+  late final EmpresaBloc _empresaBloc;
+  final TextEditingController _searchController = TextEditingController();
+  List<VantagemDTO> vantagens = [];
+  bool isLoading = false;
 
-  String nome = "Nome da Empresa";
-  String email = "email@empresa.com";
-  String cnpj = "12.345.678/0001-99";
-  String senha = "********";
+  @override
+void initState() {
+  super.initState();
 
-  void _addProduto(String nome, int custo) {
+  // Defina o baseUrl do seu servidor backend.
+  const String baseUrl = 'https://seu-servidor.com';
+
+  // Instância do VantagemClient com baseUrl.
+  final vantagemClient = VantagemClient(baseUrl: baseUrl);
+
+  // Criação do EmpresaBloc com VantagemService.
+  _empresaBloc = EmpresaBloc(VantagemService(vantagemClient));
+
+  // Escutando os estados do Bloc.
+  _empresaBloc.stream.listen((state) {
+    if (state is EmpresaLoaded) {
+      setState(() {
+        vantagens = state.vantagens;
+        isLoading = false;
+      });
+    } else if (state is EmpresaError) {
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(state.message)),
+      );
+    }
+  });
+}
+
+  void _buscarVantagens() {
+    final query = _searchController.text.trim();
+    if (query.isEmpty) return;
+
     setState(() {
-      produtos.add({'nome': nome, 'custo': custo});
+      isLoading = true;
     });
-  }
 
-  void _showAddProdutoDialog() {
-    String nome = '';
-    int custo = 0;
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Cadastrar Novo Produto'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                decoration: InputDecoration(labelText: 'Nome da Vantagem'),
-                onChanged: (value) {
-                  nome = value;
-                },
-              ),
-              TextField(
-                decoration: InputDecoration(labelText: 'Custo em Moedas'),
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  custo = int.tryParse(value) ?? 0;
-                },
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                if (nome.isNotEmpty && custo > 0) {
-                  _addProduto(nome, custo);
-                  Navigator.of(context).pop();
-                }
-              },
-              child: Text('Adicionar'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancelar'),
-            ),
-          ],
-        );
-      },
-    );
+    _empresaBloc.add(FetchVantagensEvent(query));
   }
 
   @override
   Widget build(BuildContext context) {
+    // Código do build permanece o mesmo.
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -93,118 +86,117 @@ class _EmpresaPageState extends State<EmpresaPage> {
           children: [
             Stack(
               children: [
-                Divider(
-                  color: Colors.grey[300],
-                ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     children: [
                       UserInfoWidget(
                         user: Context.currentUser,
                         top: 18,
                       ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Expanded(
-                        child: GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            childAspectRatio: 1.0,
-                            mainAxisSpacing: 8,
-                            crossAxisSpacing: 8,
-                          ),
-                          itemCount: produtos.length,
-                          itemBuilder: (context, index) {
-                            final produto = produtos[index];
-                            return Card(
-                              color: Colors.white,
-                              elevation: 4,
-                              child: Container(
-                                padding: const EdgeInsets.all(10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      produto['nome'],
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const SizedBox(height: 1),
-                                    Text('Custo: ${produto['custo']} Moedas'),
-                                  ],
-                                ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _searchController,
+                              decoration: InputDecoration(
+                                labelText: 'Digite o nome ou CNPJ',
+                                border: OutlineInputBorder(),
                               ),
-                            );
-                          },
-                        ),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          ElevatedButton(
+                            onPressed: _buscarVantagens,
+                            child: Text('Buscar Minhas Vantagens'),
+                          ),
+                        ],
                       ),
+                      SizedBox(height: 20),
+                      isLoading
+                          ? CircularProgressIndicator()
+                          : vantagens.isEmpty
+                              ? Text('Nenhuma vantagem encontrada.')
+                              : Expanded(
+                                  child: GridView.builder(
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                      childAspectRatio: 1.0,
+                                      mainAxisSpacing: 8,
+                                      crossAxisSpacing: 8,
+                                    ),
+                                    itemCount: vantagens.length,
+                                    itemBuilder: (context, index) {
+                                      final vantagem = vantagens[index];
+                                      return Card(
+                                        color: Colors.white,
+                                        elevation: 4,
+                                        child: Container(
+                                          padding: const EdgeInsets.all(10),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                vantagem.nome,
+                                                style: const TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              const SizedBox(height: 1),
+                                              Text(
+                                                  'Custo: ${vantagem.custo} Moedas'),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
                     ],
-                  ),
-                ),
-                Positioned(
-                  top: 590,
-                  left: 20,
-                  child: GestureDetector(
-                    onTap: _showAddProdutoDialog,
-                    child: Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.add,
-                          size: 32,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ),
                   ),
                 ),
               ],
             ),
             Center(
-                child: Column(
-              children: [
-                Divider(
-                  color: Colors.grey[300],
-                ),
-                Container(
-                  padding: const EdgeInsets.all(5),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Sair',
-                        style: TextStyle(
-                            color: Colors.grey[600],
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20),
-                      ),
-                      const Spacer(),
-                      IconButton(
+              child: Column(
+                children: [
+                  Divider(color: Colors.grey[300]),
+                  Container(
+                    padding: const EdgeInsets.all(5),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Sair',
+                          style: TextStyle(
+                              color: Colors.grey[600],
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        ),
+                        Spacer(),
+                        IconButton(
                           onPressed: () {
                             Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => LoginPage(),
-                                ));
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginPage(),
+                              ),
+                            );
                           },
-                          icon: HeroIcon(HeroIcons.arrowRightOnRectangle))
-                    ],
+                          icon:
+                              HeroIcon(HeroIcons.arrowRightOnRectangle),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Divider(
-                  color: Colors.grey[300],
-                ),
-              ],
-            )),
+                  Divider(color: Colors.grey[300]),
+                ],
+              ),
+            ),
           ],
         ),
         bottomNavigationBar: TabBar(
@@ -224,5 +216,12 @@ class _EmpresaPageState extends State<EmpresaPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _empresaBloc.close();
+    _searchController.dispose();
+    super.dispose();
   }
 }

@@ -1,9 +1,7 @@
-import 'package:front_moeda_estudantil/domain/user/dtos/user_dto.dart';
+abstract class EmpresaEvent {}
 
-abstract class EmpresaDetalhesEvent {}
+class FetchVantagensEvent extends EmpresaEvent {
+  final String nomeOuCnpj;
 
-class EmpresaDetalhesUpdateEvent extends EmpresaDetalhesEvent {
-    final UserDTO user;
-
-  EmpresaDetalhesUpdateEvent({required this.user});
+  FetchVantagensEvent(this.nomeOuCnpj);
 }

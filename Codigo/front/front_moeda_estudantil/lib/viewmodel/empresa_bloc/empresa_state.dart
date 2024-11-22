@@ -1,7 +1,18 @@
-abstract class EmpresaDetalhesState {}
+import '../../domain/vantagem/dtos/vantagem_dto.dart';
+abstract class EmpresaState {}
 
-class EmpresaDetalhesInitState extends EmpresaDetalhesState {}
+class EmpresaInitial extends EmpresaState {}
 
-class UpdateEmpresaSuccessState extends EmpresaDetalhesState {}
+class EmpresaLoading extends EmpresaState {}
 
-class UpdateEmpresaErrorState extends EmpresaDetalhesState {}
+class EmpresaLoaded extends EmpresaState {
+  final List<VantagemDTO> vantagens;
+
+  EmpresaLoaded(this.vantagens);
+}
+
+class EmpresaError extends EmpresaState {
+  final String message;
+
+  EmpresaError(this.message);
+}
