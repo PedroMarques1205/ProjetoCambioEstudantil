@@ -1,13 +1,19 @@
 class VantagemDTO {
-  final String nome;
-  final int custo;
+  final String titulo;
+  final String descricao;
+  final int valor;
 
-  VantagemDTO({required this.nome, required this.custo});
+  VantagemDTO({
+    required this.titulo,
+    required this.descricao,
+    required this.valor,
+  });
 
   factory VantagemDTO.fromJson(Map<String, dynamic> json) {
     return VantagemDTO(
-      nome: json['nome'] as String,
-      custo: json['custo'] as int,
+      titulo: json['titulo'] as String,
+      descricao: json['descricao'] as String,
+      valor: json['valor'] as int,
     );
   }
 }

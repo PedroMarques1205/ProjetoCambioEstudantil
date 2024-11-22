@@ -1,23 +1,41 @@
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:retrofit/retrofit.dart';
+import 'package:dio/dio.dart';
 import '../dtos/vantagem_dto.dart';
+import 'package:dio/dio.dart';
+import '../dtos/vantagem_dto.dart';
+part 'vantagem_client.g.dart';
 
-class VantagemClient {
-  final String baseUrl;
+@RestApi()
+abstract class VantagemClient {
+  factory VantagemClient(Dio dio) = _VantagemClient;
 
-  // Construtor com parâmetro obrigatório baseUrl.
-  VantagemClient({required this.baseUrl});
-
-  Future<List<VantagemDTO>> obterVantagensPorEmpresa(String nomeOuCnpj) async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/api/vantagem/obterVantagensPorEmpresa?empresa=$nomeOuCnpj'),
-    );
-
-    if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
-      return data.map((item) => VantagemDTO.fromJson(item)).toList();
-    } else {
-      throw Exception('Erro ao buscar vantagens: ${response.body}');
-    }
-  }
+  @GET('/vantagem/obterVantagensPorEmpresa')
+  Future<List<VantagemDTO>> obterVantagensPorEmpresa(
+    @Query('cnpj') String cnpj,
+  );
 }
+
+
+// class VantagemClient {
+//   final Dio _dio;
+
+//   VantagemClient(this._dio);
+
+//   // Método para buscar vantagens por CNPJ
+//   Future<List<VantagemDTO>> obterVantagensPorEmpresa(String cnpj) async {
+//     try {
+//       final response = await _dio.get('/vantagens/$cnpj');
+//       if (response.statusCode == 200) {
+//         return (response.data as List)
+//             .map((item) => VantagemDTO.fromJson(item))
+//             .toList();
+//       } else {
+//         // Adicionando mais detalhes para a depuração
+//         throw Exception('Erro ao buscar vantagens, status: ${response.statusCode}');
+//       }
+//     } catch (e) {
+//       // Exibindo detalhes do erro
+//       throw Exception('Erro ao buscar vantagens: $e');
+//     }
+//   }
+// }

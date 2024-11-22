@@ -1,7 +1,10 @@
 abstract class EmpresaEvent {}
 
 class FetchVantagensEvent extends EmpresaEvent {
-  final String nomeOuCnpj;
+  final String cnpj;
 
-  FetchVantagensEvent(this.nomeOuCnpj);
+  FetchVantagensEvent(this.cnpj);
+
+  @override
+  List<Object> get props => [cnpj];
 }
