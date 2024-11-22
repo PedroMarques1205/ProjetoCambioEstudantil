@@ -6,9 +6,10 @@ class VantagemService {
 
   VantagemService(this._vantagemClient);
 
-  Future<List<VantagemDTO>> obterVantagensPorEmpresa(String cnpj) async {
+  Future<dynamic> obterVantagensPorEmpresa(String cnpj) async {
     try {
       final response = await _vantagemClient.obterVantagensPorEmpresa(cnpj);
+      print(response);
       return response;
     } catch (e) {
       throw Exception('Erro ao obter vantagens');

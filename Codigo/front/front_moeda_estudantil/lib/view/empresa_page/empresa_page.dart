@@ -5,11 +5,11 @@ import 'package:front_moeda_estudantil/domain/vantagem/dtos/vantagem_dto.dart';
 import 'package:front_moeda_estudantil/domain/vantagem/vantagem_service.dart';
 import 'package:front_moeda_estudantil/domain/vantagem/client/vantagem_client.dart';
 import 'package:front_moeda_estudantil/generated/cambio_colors.dart';
+import 'package:front_moeda_estudantil/view/empresa_page/widgets/nova_vatagem.dart';
 import 'package:front_moeda_estudantil/viewmodel/empresa_bloc/empresa_bloc.dart';
 import 'package:front_moeda_estudantil/viewmodel/empresa_bloc/empresa_event.dart';
 import 'package:front_moeda_estudantil/viewmodel/empresa_bloc/empresa_state.dart';
 import 'package:front_moeda_estudantil/view/login_page/login_page.dart';
-import 'package:front_moeda_estudantil/view/empresa_page/widgets/nova_vatagem.dart';
 import 'package:heroicons/heroicons.dart';
 
 class EmpresaPage extends StatefulWidget {
@@ -35,7 +35,6 @@ class _EmpresaPageState extends State<EmpresaPage> {
     super.dispose();
   }
 
-  // Função para verificar se o CNPJ é válido
   bool _isValidCNPJ(String cnpj) {
     return cnpj.length == 14 && int.tryParse(cnpj) != null;
   }
@@ -49,10 +48,6 @@ class _EmpresaPageState extends State<EmpresaPage> {
           setState(() {
             vantagens = state.vantagens;
           });
-        } else if (state is EmpresaError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
         }
       },
       builder: (context, state) {
@@ -75,11 +70,13 @@ class _EmpresaPageState extends State<EmpresaPage> {
                 indicatorColor: CambioColors.greenSecondary,
                 tabs: [
                   Tab(
-                    icon: HeroIcon(HeroIcons.home, style: HeroIconStyle.outline),
+                    icon:
+                        HeroIcon(HeroIcons.home, style: HeroIconStyle.outline),
                     text: 'Home',
                   ),
                   Tab(
-                    icon: HeroIcon(HeroIcons.cog6Tooth, style: HeroIconStyle.outline),
+                    icon: HeroIcon(HeroIcons.cog6Tooth,
+                        style: HeroIconStyle.outline),
                     text: 'Config',
                   ),
                 ],
@@ -91,22 +88,22 @@ class _EmpresaPageState extends State<EmpresaPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     children: [
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       TextField(
                         controller: _searchController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Digite o CNPJ da empresa',
                           border: OutlineInputBorder(),
                         ),
                         keyboardType: TextInputType.number,
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       ElevatedButton(
                         onPressed: () {
                           final cnpj = _searchController.text;
                           if (cnpj.isEmpty || !_isValidCNPJ(cnpj)) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('CNPJ inválido.')),
+                              const SnackBar(content: Text('CNPJ inválido.')),
                             );
                           } else {
                             _empresaBloc.add(FetchVantagensEvent(cnpj));
@@ -117,8 +114,20 @@ class _EmpresaPageState extends State<EmpresaPage> {
                         ),
                         child: Text('Buscar Minhas Vantagens'),
                       ),
-                      SizedBox(height: 20),
-                      // Exibição de vantagens
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return NovaVantagemPage();
+                              });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: CambioColors.greenSecondary,
+                        ),
+                        child: Text('Nova vantagem'),
+                      ),
                       if (state is VantagensLoading)
                         CircularProgressIndicator(),
                       if (vantagens.isNotEmpty)
@@ -131,9 +140,10 @@ class _EmpresaPageState extends State<EmpresaPage> {
                                 margin: EdgeInsets.symmetric(vertical: 5),
                                 elevation: 5,
                                 child: ListTile(
-                                  title: Text(vantagem.titulo),
-                                  subtitle: Text(vantagem.descricao),
-                                  trailing: Text('R\$ ${vantagem.valor.toString()}'),
+                                  title: Text(vantagem.titulo ?? '-'),
+                                  subtitle: Text(vantagem.descricao ?? '-'),
+                                  trailing:
+                                      Text('R\$ ${vantagem.valor.toString()}'),
                                 ),
                               );
                             },
@@ -147,7 +157,6 @@ class _EmpresaPageState extends State<EmpresaPage> {
                     ],
                   ),
                 ),
-                // Configurações
                 Center(
                   child: Column(
                     children: [
@@ -165,7 +174,8 @@ class _EmpresaPageState extends State<EmpresaPage> {
                           onPressed: () {
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (context) => LoginPage()),
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()),
                             );
                           },
                           icon: HeroIcon(HeroIcons.arrowRightOnRectangle),

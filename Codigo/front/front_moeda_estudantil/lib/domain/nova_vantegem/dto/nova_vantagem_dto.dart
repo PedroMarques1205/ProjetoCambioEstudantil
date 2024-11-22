@@ -1,7 +1,7 @@
 class NovaVantagemDTO {
   final String titulo;
   final String descricao;
-  final int valor;
+  final double valor;
   final String email;
 
   NovaVantagemDTO({

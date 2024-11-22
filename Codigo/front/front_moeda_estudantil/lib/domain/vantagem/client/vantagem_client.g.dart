@@ -22,12 +22,12 @@ class _VantagemClient implements VantagemClient {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<List<VantagemDTO>> obterVantagensPorEmpresa(String cnpj) async {
+  Future<dynamic> obterVantagensPorEmpresa(String cnpj) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'cnpj': cnpj};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<List<VantagemDTO>>(Options(
+    final _options = _setStreamType<dynamic>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -43,16 +43,8 @@ class _VantagemClient implements VantagemClient {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    final _result = await _dio.fetch<List<dynamic>>(_options);
-    late List<VantagemDTO> _value;
-    try {
-      _value = _result.data!
-          .map((dynamic i) => VantagemDTO.fromJson(i as Map<String, dynamic>))
-          .toList();
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
     return _value;
   }
 
