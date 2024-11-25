@@ -1,9 +1,7 @@
 package com.pucminas.backprojetomoeda.entrypoint.vantagem;
 
 
-import com.pucminas.backprojetomoeda.model.Usuario;
 import com.pucminas.backprojetomoeda.model.Vantagem;
-import com.pucminas.backprojetomoeda.usecase.usuario.ObterUsuarioUseCase;
 import com.pucminas.backprojetomoeda.usecase.vantagem.ObterVantagemUseCase;
 import com.pucminas.backprojetomoeda.usecase.vantagem.SalvarVantagemUseCase;
 import org.springframework.beans.factory.annotation.Autowired;

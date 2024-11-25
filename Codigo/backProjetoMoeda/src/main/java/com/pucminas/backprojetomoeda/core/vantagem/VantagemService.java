@@ -1,7 +1,6 @@
 package com.pucminas.backprojetomoeda.core.vantagem;
 
 import com.pucminas.backprojetomoeda.dataprovider.vantagem.IVantagemRepository;
-import com.pucminas.backprojetomoeda.model.Usuario;
 import com.pucminas.backprojetomoeda.model.Vantagem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
